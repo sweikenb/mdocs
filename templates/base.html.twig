@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ navActive.label }}</title>
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content="{{ navActive.metaData.description ?? navActive.label }}">
+    <meta name="keywords" content="{{ navActive.metaData.keywords ?? '' }}">
+    {{ nav_canonical_tag(navActive) }}
+    <link rel="stylesheet" href="{{ theme_css_path() }}">
+    <script src="{{ theme_js_path() }}"></script>
+</head>
+<body>
+{% apply spaceless %}
+    <div class="container">
+        {% block sidebar %}
+            <div id="sidebar">
+                {{ main_navigation(file) }}
+            </div>
+        {% endblock %}
+        {% block content %}
+            <main id="content">
+                {{ file.content|raw }}
+            </main>
+        {% endblock %}
+    </div>
+    <footer>
+        {% block footer %}
+            Rendered at {{ 'now'|date('Y-m-d H:i') }}
+        {% endblock %}
+    </footer>
+{% endapply %}
+</body>
+</html>

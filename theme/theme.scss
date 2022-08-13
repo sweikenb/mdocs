@@ -1,0 +1,197 @@
+$bluishGrey: #303e48;
+$lightBlue: #1fc2de;
+$lightGrey: #dadada;
+$white: #ffffff;
+
+* {
+  vertical-align: baseline;
+  font-weight: normal;
+  font-family: sans-serif;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 1.6em;
+  border: 0 none;
+  outline: 0;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  background: lighten($bluishGrey, 65%);
+}
+
+h1, h2, h3, h4, h5, h6, p, pre, blockquote, form, ul, ol, dl {
+  margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  padding: 1em 0 .1em 0;
+}
+
+strong b {
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.8em;
+}
+
+h3 {
+  font-size: 1.6em;
+}
+
+a, a:hover, a:active, a:visited, a:active {
+  color: $bluishGrey;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+a:hover {
+  color: $lightBlue;
+  text-decoration: none;
+}
+
+a:visited {
+  color: darken($lightBlue, 15%);
+  text-decoration: underline;
+}
+
+
+p {
+  padding: .5em 0;
+}
+
+ul {
+  padding: 1em;
+  list-style: none;
+
+  & ul {
+    padding: 0;
+    margin: .1em 0;
+  }
+}
+
+li, dd {
+  padding: 0;
+  margin: 0 0 0 1.2em;
+}
+
+li::before {
+  content: "\25A0";
+  color: $lightBlue;
+  display: inline-block;
+  font-size: 1em;
+  width: 1em;
+  margin-left: -1em;
+}
+
+li a.active {
+  font-weight: bold;
+}
+
+blockquote {
+  padding: 1em;
+  border-left: solid 0.2em $lightGrey;
+  font-style: italic;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > * {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 30ch;
+  }
+}
+
+#sidebar {
+  flex-basis: 20rem;
+  flex-grow: 1;
+  min-inline-size: 26em;
+  max-inline-size: 26em;
+
+  ul li {
+    &, a, a:hover, a:active, a:visited {
+      text-decoration: none;
+      color: $bluishGrey;
+      line-height: 2em;
+
+      &.active {
+        border-bottom: solid .2em $lightBlue;
+      }
+    }
+  }
+}
+
+#site-name {
+  background: $bluishGrey;
+  padding: 1em;
+
+  &, a, a:hover, a:active, a:visited {
+    text-decoration: none;
+    color: $lightBlue;
+    font-size: 1.2em;
+  }
+}
+
+#content {
+  padding: 0 3em 3em 3em;
+  background: $white;
+
+  li::before {
+    color: $bluishGrey;
+  }
+}
+
+#site-name, #content {
+  border-bottom: solid .25em $lightBlue;
+}
+
+footer {
+  text-align: right;
+  padding: 2em 1em;
+  color: $bluishGrey;
+  font-weight: lighter;
+}
+
+code {
+  background: $lightGrey;
+  font-family: monospace;
+  padding: .1em .4em;
+  border-radius: .2em;
+  cursor: text;
+  white-space: nowrap;
+}
+
+pre code, img {
+  max-width: 65em;
+}
+
+img {
+  margin: 1em;
+}
+
+pre code {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+  line-height: 1.8em;
+  border-radius: unset;
+  white-space: pre;
+
+  &:hover {
+    max-width: none;
+  }
+}

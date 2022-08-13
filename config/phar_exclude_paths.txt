@@ -1,0 +1,10 @@
+.gitlab-ci.yml
+docs
+public
+tests
+theme/node_modules
+var
+vendor/bin
+phpcs.xml
+phpmd.xml
+phpunit.xml

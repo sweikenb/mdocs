@@ -1,0 +1,43 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  # makes classes in src/ available to be used as services
+  Sweikenb\Mdocs\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  # Make libraries available
+  Sweikenb\Library\Filesystem\:
+    resource: '../vendor/sweikenb/lib-fs/src/'
+  Sweikenb\Library\Markdown\:
+    resource: '../vendor/sweikenb/lib-md/src/'
+
+  # Register named services
+  mdocs.services.widget:
+    class: Sweikenb\Mdocs\Service\WidgetService
+
+  # Register core widgets
+  mdocs.widgets.core.page_index:
+    class: Sweikenb\Mdocs\Widgets\PageIndexWidget
+    tags: [ mdocs.widget ]
+  mdocs.widgets.core.content_index:
+    class: Sweikenb\Mdocs\Widgets\ContentIndexWidget
+    tags: [ mdocs.widget ]
+
+  #
+  # Aliases
+  #
+  Sweikenb\Mdocs\Service\WidgetService: "@mdocs.services.widget"

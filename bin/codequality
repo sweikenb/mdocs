@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+php ./vendor/bin/phpcs --standard=phpcs.xml -n -q
+php ./vendor/bin/phpmd src text phpmd.xml
+php ./vendor/bin/phpstan analyse src --no-progress --level 9

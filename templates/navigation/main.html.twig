@@ -1,0 +1,30 @@
+{% macro navi_tree(node, active) %}
+    <li>{{ render_nav_link(node, active) }}
+        {% if node.children %}
+            <ul>
+                {% for child in node.children %}
+                    {{ _self.navi_tree(child, active) }}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+<nav>
+    {% if navTree.indexNode %}
+        {% set indexNode = navTree.indexNode ?? navTree %}
+        {% set siteName = indexNode.label %}
+    {% else %}
+        {% set indexNode = navTree %}
+        {% set siteName = 'Documentation' %}
+    {% endif %}
+    <div id="site-name">
+        {{ render_nav_link(indexNode, navActive, siteName) }}
+    </div>
+    <ul>
+        <li>{{ render_nav_link(indexNode, navActive, 'Home') }}</li>
+        {% for firstLvl in indexNode.children %}
+            {{ _self.navi_tree(firstLvl, navActive) }}
+        {% endfor %}
+    </ul>
+</nav>

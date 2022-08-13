@@ -1,0 +1,10 @@
+{
+    "license": "proprietary",
+    "dependencies": {
+        "sass": "^1.54.4"
+    },
+    "scripts": {
+        "build:watch": "./node_modules/.bin/sass --watch ./theme.scss ../build/theme.css",
+        "build": "./node_modules/.bin/sass ./theme.scss ../build/theme.css"
+    }
+}
