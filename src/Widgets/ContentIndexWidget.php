@@ -18,6 +18,7 @@ class ContentIndexWidget extends AbstractWidget
     {
         return [
             'ignore_first' => true,
+            'headline' => 'Page Content',  // or false to disable the headline
         ];
     }
 
@@ -26,6 +27,7 @@ class ContentIndexWidget extends AbstractWidget
         $settings = array_merge($this->getUserSettings(), $settings);
         $lines = explode("\n", $file->getContent());
 
+        $widgetHeadline = $settings['headline'];
         $doIgnoreFirst = (bool)$settings['ignore_first'];
 
         $contentIndex = [];
@@ -57,8 +59,10 @@ class ContentIndexWidget extends AbstractWidget
                         } else {
                             $lastRenderLevel = $level;
                         }
-                    } else if ($lastLevel < $level) {
-                        $lastRenderLevel++;
+                    } else {
+                        if ($lastLevel < $level) {
+                            $lastRenderLevel++;
+                        }
                     }
                 }
 
@@ -80,9 +84,16 @@ class ContentIndexWidget extends AbstractWidget
             }
         }
 
+        // update content
         $file->setContent(implode("\n", $lines));
 
-        return implode("\n", $contentIndex);
+        // Add headline?
+        $contentList = implode("\n", $contentIndex);
+        if ($widgetHeadline !== false) {
+            $contentList = sprintf("\n\n---\n\n**%s**\n\n%s\n\n---\n\n", trim($widgetHeadline), $contentList);
+        }
+
+        return $contentList;
     }
 
     private function normalizeAnchor(string $anchor): string

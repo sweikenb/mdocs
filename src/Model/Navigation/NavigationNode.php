@@ -21,7 +21,8 @@ class NavigationNode implements NavigationNodeInterface
     public function __construct(
         private readonly string $label,
         private readonly string $link,
-        private readonly ?NavigationNodeInterface $parent,
+        private readonly string $filesystemReferenceName,
+        private ?NavigationNodeInterface $parent,
         private array $children
     ) {
     }
@@ -51,12 +52,25 @@ class NavigationNode implements NavigationNodeInterface
         return $this->parent;
     }
 
+    public function setParent(?NavigationNodeInterface $parent): void
+    {
+        $this->parent = $parent;
+    }
+
     /**
      * @return array<int, NavigationNodeInterface>
      */
     public function getChildren(): array
     {
         return $this->children;
+    }
+
+    /**
+     * @param array<int, NavigationNodeInterface> $children
+     */
+    public function setChildren(array $children): void
+    {
+        $this->children = $children;
     }
 
     public function addChild(NavigationNodeInterface $child): void
@@ -67,6 +81,11 @@ class NavigationNode implements NavigationNodeInterface
     public function isFallbackLink(): bool
     {
         return in_array($this->link, [NavigationService::FALLBACK_LINK, DocumentLinkerService::FALLBACK_LINK]);
+    }
+
+    public function getFilesystemReferenceName(): string
+    {
+        return $this->filesystemReferenceName;
     }
 
     public function setMetaData(array $metaData): void

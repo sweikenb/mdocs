@@ -29,8 +29,17 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1em 0 .1em 0;
 }
 
-strong b {
+strong, b {
   font-weight: bold;
+}
+
+em, i {
+  font-style: italic;
+}
+
+hr {
+  margin: 1em 0;
+  border-top: solid .1em $lightBlue;
 }
 
 h1 {
@@ -46,7 +55,7 @@ h3 {
 }
 
 a, a:hover, a:active, a:visited, a:active {
-  color: $bluishGrey;
+  color: darken($lightBlue, 5%);
   text-decoration: underline;
   cursor: pointer;
 }
@@ -175,10 +184,6 @@ code {
   white-space: nowrap;
 }
 
-pre code, img {
-  max-width: 65em;
-}
-
 img {
   margin: 1em;
 }
@@ -190,8 +195,8 @@ pre code {
   line-height: 1.8em;
   border-radius: unset;
   white-space: pre;
+}
 
-  &:hover {
-    max-width: none;
-  }
+.container > * {
+  max-width: 68em;
 }

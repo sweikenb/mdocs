@@ -7,7 +7,7 @@ use Sweikenb\Mdocs\Api\NavigationNodeInterface;
 use Sweikenb\Mdocs\Service\DocumentLinkerService;
 use Sweikenb\Mdocs\Service\NavigationService;
 
-class PageIndexWidget extends AbstractWidget
+class DirIndexWidget extends AbstractWidget
 {
     public function __construct(
         private readonly NavigationService $navigationService
@@ -16,7 +16,7 @@ class PageIndexWidget extends AbstractWidget
 
     public function getIdentifier(): string
     {
-        return 'PAGE_INDEX';
+        return 'DIR_INDEX';
     }
 
     /**
@@ -28,6 +28,8 @@ class PageIndexWidget extends AbstractWidget
             'skipp_same_level' => true,
             'skipp_self' => true,
             'depth' => -1,
+            'dir' => './',
+            'headline' => false, // or the actual headline to use
         ];
     }
 
@@ -39,6 +41,11 @@ class PageIndexWidget extends AbstractWidget
         }
 
         $settings = array_merge($this->getUserSettings(), $settings);
+        $widgetHeadline = $settings['headline'];
+        $startDir = $settings['dir'] ?? './';
+        if (!in_array($startDir, ['', '.', './'])) {
+            // TODO implement navigation feature
+        }
 
         $skippSameLevel = (bool)$settings['skipp_same_level'];
         $skippSelf = (bool)$settings['skipp_self'];
@@ -64,7 +71,13 @@ class PageIndexWidget extends AbstractWidget
             $this->collectNestedList($node, $depth, $list, $currentDepth, $skippInitialNode);
         }
 
-        return implode("\n", $list);
+        // Add headline?
+        $pageList = implode("\n", $list);
+        if ($widgetHeadline !== false) {
+            $pageList = sprintf("\n\n---\n\n**%s**\n\n%s\n\n---\n\n", trim($widgetHeadline), $pageList);
+        }
+
+        return $pageList;
     }
 
     /**
@@ -82,9 +95,6 @@ class PageIndexWidget extends AbstractWidget
             $list[] = $this->getListItem($sourceNode, $currentDepth);
         }
 
-        // reset flag after first check
-        $skippInitialNode = false;
-
         // render list items
         foreach ($sourceNode->getChildren() as $node) {
             $list[] = $this->getListItem($node, $currentDepth + 1);
@@ -92,7 +102,7 @@ class PageIndexWidget extends AbstractWidget
             // render further children?
             if ($maxDepth === -1 || $maxDepth > ($currentDepth + 1)) {
                 foreach ($node->getChildren() as $child) {
-                    $this->collectNestedList($child, $maxDepth, $list, ($currentDepth + 2), $skippInitialNode);
+                    $this->collectNestedList($child, $maxDepth, $list, ($currentDepth + 2), false);
                 }
             }
         }

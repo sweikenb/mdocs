@@ -18,6 +18,12 @@ class NavigationService
      * @var array<int, NavigationNodeInterface>
      */
     private array $fileToNodeRegistry = [];
+
+    /**
+     * @var array<int, FileInterface>
+     */
+    private array $nodeToFileRegistry = [];
+
     private ?string $linkPrefix = null;
     private ?NavigationNodeInterface $rootNode = null;
 
@@ -44,6 +50,11 @@ class NavigationService
         return $this->fileToNodeRegistry[spl_object_id($file)] ?? null;
     }
 
+    public function findFileForNode(NavigationNodeInterface $node): ?FileInterface
+    {
+        return $this->nodeToFileRegistry[spl_object_id($node)] ?? null;
+    }
+
     /**
      * @throws NavigationAlreadyParsedException
      */
@@ -53,7 +64,7 @@ class NavigationService
             throw new NavigationAlreadyParsedException();
         }
         $this->linkPrefix = $linkPrefix;
-        $this->rootNode = $this->createFallbackIndexNode(null);
+        $this->rootNode = $this->createFallbackIndexNode(null, $tree);
         $this->walkTree($tree, $this->rootNode);
     }
 
@@ -66,6 +77,8 @@ class NavigationService
         $isRootLevel = $parentNode === $this->rootNode;
 
         $numFiles = count($dir->getFiles());
+        $numMarkdownFiles = 0;
+        $lastMarkdownFileNode = null;
         foreach ($dir->getFiles() as $file) {
             if (!$this->markdownService->isMarkdownFile($file->getRelPath())) {
                 continue;
@@ -73,23 +86,42 @@ class NavigationService
             $node = $this->createNodeForFile($parentNode, $file);
             $parentNode->addChild($node);
             $this->fileToNodeRegistry[spl_object_id($file)] = $node;
+            $this->nodeToFileRegistry[spl_object_id($node)] = $file;
             if ($numFiles === 1 || $this->isIndexFileExactMatch($file->getRelPath())) {
                 $dirIndex = $node;
             }
+            $numMarkdownFiles++;
+            $lastMarkdownFileNode = $node;
         }
 
         if ($dirIndex === null) {
-            foreach ($dir->getFiles() as $file) {
-                if (!$this->markdownService->isMarkdownFile($file->getRelPath())) {
-                    continue;
-                }
-                if ($this->isIndexFileCandidate($file->getRelPath())) {
-                    $dirIndex = $this->fileToNodeRegistry[spl_object_id($file)];
-                    break;
+            if ($numMarkdownFiles === 1) {
+                $dirIndex = $lastMarkdownFileNode;
+            }
+            if ($dirIndex === null) {
+                foreach ($dir->getFiles() as $file) {
+                    if (!$this->markdownService->isMarkdownFile($file->getRelPath())) {
+                        continue;
+                    }
+                    if ($this->isIndexFileCandidate($file->getRelPath())) {
+                        $dirIndex = $this->fileToNodeRegistry[spl_object_id($file)];
+                        break;
+                    }
                 }
             }
             if ($dirIndex === null) {
-                $dirIndex = $this->createFallbackIndexNode($parentNode);
+                $dirIndex = $this->createFallbackIndexNode($parentNode, $dir);
+                foreach ($dir->getFiles() as $file) {
+                    $node = $this->findNodeForFile($file);
+                    if ($node === null) {
+                        continue;
+                    }
+                    if ($node->getParent() && $node->getParent() !== $dirIndex) {
+                        $node->getParent()->setChildren([$dirIndex]);
+                    }
+                    $node->setParent($dirIndex);
+                    $dirIndex->addChild($node);
+                }
             }
         }
 
@@ -106,7 +138,7 @@ class NavigationService
     {
         $label = $this->markdownInterceptorService->getFirstTitle($file->getContent()) ?? basename($file->getRelPath());
         $link = $this->documentLinkRegisterService->getLink($file) ?? '#err';
-        return $this->nodeFactory->create($label, $link, $parent, []);
+        return $this->nodeFactory->create($label, $link, basename($file->getRelPath()), $parent, []);
     }
 
     private function isIndexFileExactMatch(string $filename): bool
@@ -133,10 +165,27 @@ class NavigationService
         return $result === 1;
     }
 
-    private function createFallbackIndexNode(?NavigationNodeInterface $parent): NavigationNodeInterface
-    {
-        $node = $this->nodeFactory->create('More', self::FALLBACK_LINK, $parent, []);
+    private function createFallbackIndexNode(
+        ?NavigationNodeInterface $parent,
+        DirectoryInterface $parentDir
+    ): NavigationNodeInterface {
+        $refName = basename($parentDir->getRelPath());
+        $label = $this->directoryNameToChapterName($refName);
+        $node = $this->nodeFactory->create($label, self::FALLBACK_LINK, $refName, $parent, []);
         $parent?->addChild($node);
         return $node;
+    }
+
+    private function directoryNameToChapterName(string $name): string
+    {
+        if (preg_match('/^(\d+)(.*)/', $name, $matches)) {
+            $name = $matches[2];
+        }
+
+        if (preg_match_all('/([A-Z]+[a-z0-9]+)/', $name, $matches)) {
+            $name = implode('-', array_map('ucfirst', $matches[1]));
+        }
+
+        return preg_replace('/[\s_-]+/i', ' ', $name);
     }
 }

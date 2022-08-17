@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c71e43e155288aaae6ec7ee82bd726da",
+    "content-hash": "52e699a94aa9026905de3473b0c0edfd",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1257,16 +1257,16 @@
         },
         {
             "name": "sweikenb/lib-md",
-            "version": "v1.0.0",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sweikenb/lib-md.git",
-                "reference": "5e472ef9c8b11ae84d4dd98d777b34b034d6c858"
+                "reference": "e07e7a85abe64f5ff7e582369b9d92303124af07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sweikenb/lib-md/zipball/5e472ef9c8b11ae84d4dd98d777b34b034d6c858",
-                "reference": "5e472ef9c8b11ae84d4dd98d777b34b034d6c858",
+                "url": "https://api.github.com/repos/sweikenb/lib-md/zipball/e07e7a85abe64f5ff7e582369b9d92303124af07",
+                "reference": "e07e7a85abe64f5ff7e582369b9d92303124af07",
                 "shasum": ""
             },
             "require": {
@@ -1293,9 +1293,9 @@
             "description": "Markdown library",
             "support": {
                 "issues": "https://github.com/sweikenb/lib-md/issues",
-                "source": "https://github.com/sweikenb/lib-md/tree/v1.0.0"
+                "source": "https://github.com/sweikenb/lib-md/tree/develop"
             },
-            "time": "2022-08-13T20:50:01+00:00"
+            "time": "2022-08-16T18:33:04+00:00"
         },
         {
             "name": "symfony/asset",
@@ -8945,6 +8945,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "sweikenb/lib-md": 20,
         "phpmd/phpmd": 0
     },
     "prefer-stable": true,

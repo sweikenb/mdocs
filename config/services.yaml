@@ -31,7 +31,7 @@ services:
 
   # Register core widgets
   mdocs.widgets.core.page_index:
-    class: Sweikenb\Mdocs\Widgets\PageIndexWidget
+    class: Sweikenb\Mdocs\Widgets\DirIndexWidget
     tags: [ mdocs.widget ]
   mdocs.widgets.core.content_index:
     class: Sweikenb\Mdocs\Widgets\ContentIndexWidget

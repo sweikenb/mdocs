@@ -14,14 +14,23 @@ interface NavigationNodeInterface
 
     public function getParent(): ?NavigationNodeInterface;
 
+    public function setParent(?NavigationNodeInterface $parent): void;
+
     /**
      * @return array<int, NavigationNodeInterface>
      */
     public function getChildren(): array;
 
+    /**
+     * @param array<int, NavigationNodeInterface> $children
+     */
+    public function setChildren(array $children): void;
+
     public function addChild(NavigationNodeInterface $child): void;
 
     public function isFallbackLink(): bool;
+
+    public function getFilesystemReferenceName(): string;
 
     /**
      * @param array<string, string> $metaData

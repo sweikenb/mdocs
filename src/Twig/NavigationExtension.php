@@ -59,7 +59,7 @@ class NavigationExtension extends AbstractExtension
         ?string $overwriteLabel = null
     ): string {
         if ($node->isFallbackLink()) {
-            return $overwriteLabel ?? $node->getLabel();
+            return sprintf("<em>%s:</em>", $overwriteLabel ?? $node->getLabel());
         }
 
         if ($node === $active) {

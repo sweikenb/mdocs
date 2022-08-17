@@ -13,9 +13,10 @@ class NavigationNodeFactory
     public function create(
         string $label,
         string $link,
+        string $fsRefName,
         ?NavigationNodeInterface $parent,
         array $children
     ): NavigationNodeInterface {
-        return new NavigationNode($label, $link, $parent, $children);
+        return new NavigationNode($label, $link, $fsRefName, $parent, $children);
     }
 }

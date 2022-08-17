@@ -13,7 +13,7 @@
         "phpstan/phpdoc-parser": "^1.6",
         "sensio/framework-extra-bundle": "^6.1",
         "sweikenb/lib-fs": "^1.0",
-        "sweikenb/lib-md": "^1.0",
+        "sweikenb/lib-md": "dev-develop",
         "sweikenb/console-framework": "^0.4.0",
         "symfony/asset": "6.1.*",
         "symfony/console": "6.1.*",
