@@ -22,7 +22,7 @@ class DocumentLinkerService
 
         // find links to markdown files in the document
         $pattern = sprintf(
-            '/(<a href="((.+)\.(%s)((\?|#).*)?)">)/i',
+            '/(<a href="(([^"]+)\.(%s)((\?|#)[^"]*)?)">)/i',
             implode('|', $this->markdownService->getFileExtensions())
         );
         if (preg_match_all($pattern, $content, $matches)) {
