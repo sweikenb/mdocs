@@ -12,14 +12,8 @@ class BuildThemeService
         $this->runInDir($themeDir, function () use ($buildDir) {
             passthru(
                 sprintf(
-                    "yarn install && ./node_modules/.bin/sass theme.scss %s",
-                    escapeshellarg(rtrim($buildDir, '/') . '/theme.css')
-                )
-            );
-            passthru(
-                sprintf(
-                    "cp theme.js %s",
-                    escapeshellarg(rtrim($buildDir, '/') . '/theme.js')
+                    "yarn install && yarn build %s",
+                    escapeshellarg(rtrim($buildDir, '/'))
                 )
             );
         });
