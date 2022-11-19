@@ -74,7 +74,7 @@ class DirIndexWidget extends AbstractWidget
         // Add headline?
         $pageList = implode("\n", $list);
         if ($widgetHeadline !== false) {
-            $pageList = sprintf("\n\n---\n\n**%s**\n\n%s\n\n---\n\n", trim($widgetHeadline), $pageList);
+            $pageList = sprintf("\n\n---\n\n**%s**\n\n%s\n\n---\n\n", trim((string)$widgetHeadline), $pageList);
         }
 
         return $pageList;

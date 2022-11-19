@@ -70,6 +70,7 @@ class NavigationService
 
     /**
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function walkTree(DirectoryInterface $dir, NavigationNodeInterface $parentNode): void
     {
@@ -186,6 +187,6 @@ class NavigationService
             $name = implode('-', array_map('ucfirst', $matches[1]));
         }
 
-        return preg_replace('/[\s_-]+/i', ' ', $name);
+        return (string)preg_replace('/[\s_-]+/i', ' ', $name);
     }
 }

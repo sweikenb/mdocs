@@ -90,7 +90,7 @@ class ContentIndexWidget extends AbstractWidget
         // Add headline?
         $contentList = implode("\n", $contentIndex);
         if ($widgetHeadline !== false) {
-            $contentList = sprintf("\n\n---\n\n**%s**\n\n%s\n\n---\n\n", trim($widgetHeadline), $contentList);
+            $contentList = sprintf("\n\n---\n\n**%s**\n\n%s\n\n---\n\n", trim((string)$widgetHeadline), $contentList);
         }
 
         return $contentList;

@@ -24,13 +24,13 @@ class ThemeExtension extends AbstractExtension
         ];
     }
 
-    public function getThemeCss(): string
+    public function getThemeCss(?string $file = null): string
     {
-        return $this->navigationService->getLinkPrefix() . 'theme.css';
+        return sprintf("%s/css/%s", $this->navigationService->getLinkPrefix(), trim($file ?? 'theme.css', '/'));
     }
 
-    public function getThemeJs(): string
+    public function getThemeJs(?string $file = null): string
     {
-        return $this->navigationService->getLinkPrefix() . 'theme.js';
+        return sprintf("%s/js/%s", $this->navigationService->getLinkPrefix(), trim($file ?? 'theme.js', '/'));
     }
 }

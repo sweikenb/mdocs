@@ -18,7 +18,7 @@ class WidgetPreProcessorService
 
     private function metadataExtractor(FileInterface $file): void
     {
-        $pattern = sprintf('/^(%s)+$/i', implode('|', ['-', '=', '~', '_']));
+        $pattern = sprintf('/^(%s){3,}$/i', implode('|', ['-', '=', '~', '_']));
 
         $offset = null;
         $delimiter = '';
@@ -35,7 +35,7 @@ class WidgetPreProcessorService
                 continue;
             }
             if ($line === $delimiter) {
-                $offset = $i;
+                $offset = $i + 1;
                 break;
             }
             if (preg_match('/^[a-z0-9]/i', $line)) {
@@ -45,13 +45,13 @@ class WidgetPreProcessorService
             }
         }
 
-        // if the offset is still null, no matching end was found so we have no metadata
+        // if the offset is still null, no matching end was found, so we have no metadata
         if ($offset === null) {
             return;
         }
 
         // update the content to remove the meta information
-        $file->setContent(implode("\n", array_slice($lines, $offset)));
+        $file->setContent(trim((string)implode("\n", array_slice($lines, $offset))));
 
         // get the navigation node
         $node = $this->navigationService->findNodeForFile($file);
